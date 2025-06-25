@@ -3,15 +3,74 @@ const connectDB = require("./config/database.js");
 const app = express();
 const User = require("./models/user.js");
 
-app.use(express.json())
+app.use(express.json());
+
+// app.get("/user", async (req, res) => {
+//   const userEmail = req.body.firstName;
+//   try {
+//     const users = await User.find({ firstName: userEmail });
+//     if (users.length === 0) {
+//       res.status(404).send("user not found");
+//     } else {
+//       res.send(users);
+//     }
+//   } catch (err) {
+//     res.status(400).send("something went wrong");
+//   }
+// });
+
+
+// find one user with same email or name
+// app.get("/user", async (req, res) => {
+//   const userEmail = req.body.emailId;
+//   try {
+//     const users = await User.findOne({emailId:userEmail})
+//     if (!users) {
+//       res.status(404).send("User Not found");
+//     } else {
+//       res.send(users);
+//     }
+//   } catch (err) {
+//     res.status(400).send("Something went wrong");
+//   }
+// });
+
+
+//find all the userwith similar email id
+app.get("/user", async (req, res) => {
+  const userEmail = req.body.emailId;
+  try {
+    const users = await User.find({ emailId: userEmail });
+    if (users.length === 0) {
+      res.status(404).send("User Not found");
+    } else {
+      res.send(users);
+    }
+  } catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+});
+
+app.get("/feed", async(req,res)=>{
+    try{
+        const users = await User.find({})
+        res.send(users)
+    }
+    catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+})
+
+
+
 app.post("/signup", async (req, res) => {
-    // console.log(req.body)
-//   const userObj = {
-//     firstName: "Mehul",
-//     lastName: "Hore",
-//     emailId: "mehulhore@gmail.com",
-//     password: "Mehul@123",
-//   };
+  // console.log(req.body)
+  //   const userObj = {
+  //     firstName: "Mehul",
+  //     lastName: "Hore",
+  //     emailId: "mehulhore@gmail.com",
+  //     password: "Mehul@123",
+  //   };
   // create a new instance of user model
   const user = new User(req.body);
   try {
